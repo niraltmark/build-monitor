@@ -2,9 +2,16 @@ import * as vscode from "vscode";
 import { Realtime } from "ably";
 
 export function activate(context: vscode.ExtensionContext) {
-  const ablyApiKey =
-    "VcyHvw.cP1rxQ:k7obrq9UseQssDuB9xIQrM65ZrMRRz58cR4TsH3M3r0"; // Use a read-only public key
-  const redThemeName = "RedAlertish";
+  const config = vscode.workspace.getConfiguration("ciThemeWatcher");
+  const ablyApiKey = config.get<string>("ablyKey") ?? "";
+  const redThemeName = config.get<string>("themeName") ?? "Redalertish";
+
+  if (!ablyApiKey) {
+    vscode.window.showWarningMessage(
+      "CI Theme Watcher: Ably API key is not set. Please configure it in Settings."
+    );
+    return;
+  }
 
   const ably = new Realtime(ablyApiKey);
   const channel = ably.channels.get("ci-events");
@@ -28,7 +35,11 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.log("Available themes:", availableThemes);
 
-    if (!availableThemes.includes(redThemeName)) {
+    if (
+      !availableThemes
+        .map((t) => t.toLowerCase())
+        .includes(redThemeName.toLowerCase())
+    ) {
       vscode.window.showWarningMessage(
         `Theme "${redThemeName}" is not installed. Please install it to enable CI alerts.`
       );
