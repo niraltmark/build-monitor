@@ -1,0 +1,38 @@
+# .github/workflows/ci.yml
+name: CI with Ably Notification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Dummy step to simulate a failure (you can replace this with real build/tests)
+      - name: Simulate failure
+        run: |
+          echo "Simulating failure..."
+          exit 1
+
+      - name: Notify via Ably
+        if: failure()
+        run: |
+          curl -u "$ABLY_API_KEY:" \
+            -X POST "https://rest.ably.io/channels/ci-events/messages" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "name": "workflow_failed",
+              "data": {
+                "message": "GitHub Action failed",
+                "user": "'"${{ github.actor }}"'",
+                "repo": "'"${{ github.repository }}"'",
+                "run_id": "'"${{ github.run_id }}"'"
+              }
+            }'
+        env:
+          ABLY_API_KEY: ${{ secrets.ABLY_API_KEY }}
