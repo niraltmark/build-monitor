@@ -1,4 +1,4 @@
-# CI Theme Watcher
+# CI Theme Watcherr
 
 🔴 **CI Theme Watcher** is a lightweight VSCode extension that monitors your GitHub CI pipeline via [Ably](https://ably.com) and visually alerts you by switching your theme to a red alert theme (like [`redalertish`](https://marketplace.visualstudio.com/items?itemName=sjsepan.sjsepan-redalertish)) when a workflow fails.
 
