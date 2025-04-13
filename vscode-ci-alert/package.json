@@ -1,0 +1,68 @@
+{
+  "name": "ci-theme-watcher",
+  "displayName": "CI Theme Watcher",
+  "description": "Changes theme to redalertish on CI failure via Ably.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:ciTheme.restoreOriginalTheme"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ciTheme.restoreOriginalTheme",
+        "title": "Restore Original Theme"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "CI Theme Watcher",
+      "properties": {
+        "ciThemeWatcher.ablyKey": {
+          "type": "string",
+          "default": "",
+          "description": "Public Ably API key for listening to CI events."
+        },
+        "ciThemeWatcher.themeName": {
+          "type": "string",
+          "default": "Redalertish",
+          "description": "Theme to apply when CI fails."
+        }
+      }
+    }
+  },
+  "extensionDependencies": [
+    "sjsepan.sjsepan-redalertish"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.88.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.3.3",
+    "vscode-test": "^1.8.0"
+  },
+  "dependencies": {
+    "ably": "^1.2.47"
+  }
+}
