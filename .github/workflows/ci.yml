@@ -22,7 +22,7 @@ jobs:
       - name: Notify via Ably
         if: failure()
         run: |
-          curl -u "$ABLY_API_KEY:" \
+          curl -u "$ABLY_API_KEY" \
             -X POST "https://rest.ably.io/channels/ci-events/messages" \
             -H "Content-Type: application/json" \
             -d '{
